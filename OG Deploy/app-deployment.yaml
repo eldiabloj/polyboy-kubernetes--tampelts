@@ -49,7 +49,7 @@ spec:
 
 #kubectl create secret docker-registry my-registry-key
 #  --docker-username=eldiabloj
-#  --docker-password=dckr_pat_xG2j-SkuYvZBl5aNtijP6e2jCAs
+
 #  --docker-email=oshrbg@gmail.com
        # volumeMounts:
         #- name: app-volume
