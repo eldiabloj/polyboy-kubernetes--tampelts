@@ -1,0 +1,18 @@
+replicas: 1
+image:
+  repository: eldiabloj/polybot
+  tag: 27
+env: production
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 250m
+  limits:
+    memory: 128Mi
+    cpu: 500m
+namespace: osher-app
+hpa:
+  minReplicas: 1
+  maxReplicas: 5
+  averageUtilization: 50
+  telegramToken: "NjY0ODU3ODU0NTpBQUZObkZrYnNKWk9aaVJ1NlRlblE3dWZ3SmVkc0JfT2FFbw=="

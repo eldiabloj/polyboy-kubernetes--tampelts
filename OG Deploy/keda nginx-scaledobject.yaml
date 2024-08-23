@@ -1,0 +1,32 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: nginx-deployment-scaledobject
+  namespace: osher-app
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: nginx-deployment
+  minReplicaCount: 2
+  maxReplicaCount: 5
+  triggers:
+  - type: cpu
+    metadata:
+      type: Utilization
+      value: "50"  # 50% CPU utilization
+
+#Install KEDA
+#helm repo add kedacore https://kedacore.github.io/charts
+#helm repo update
+#helm install keda kedacore/keda --namespace keda --create-namespace
+#
+#kubectl apply -f keda nginx-scaledobject.yaml
+#Verify the KEDA Setup
+#kubectl get scaledobjects -n osher-app
+#Generate Load to Test Autoscaling
+#kubectl run -i --tty load-generator --image=busybox /bin/sh
+#while true; do wget -q -O- http://nginx-deployment:8005; done
+#Monitor the Autoscaling
+#kubectl get hpa -n osher-app -w
+#kubectl get pods -n osher-app -l app=nginx -w
+#kubectl get scaledobjects -n osher-app

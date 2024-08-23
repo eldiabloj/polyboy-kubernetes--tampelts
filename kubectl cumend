@@ -1,0 +1,27 @@
+kubectl create namespace demo_app
+-A(all) -n(namespece)
+kubectl apply -f thing to deploy
+kubectl get deployments <deployments_name>
+kubectl get pods <pod_name>
+kubectl get services <services_name>
+kubectl describe pod <pod_name>
+kubectl get pvc
+kubectl get hpa
+kubectl get events
+  helm template
+helm get manifest
+ k delete  -f . -n osher-app
+ alias h=helm
+alias k=kubectl
+alias hh="helm -n osher-app"
+hh install nginx-fe nginx-app-0.1.0.tgz
+delete hpa
+ helm uninstall
+ delete horizontalpodautoscaler nginx-deployment-hpa -n osher-app
+ delete service nginx-service -n osher-app
+ delete persistentvolumeclaim nginx-pvc -n osher-app
+hh install nginx-fe nginx-app-0.1.0.tgz
+hh install polybot-be polybot-app-0.0.1.tgz
+kubectl create secret generic telegram-token --from-literal=TELEGRAM_TOKEN=6648578545:AAFNnFkbsJZOZiRu6TenQ7ufwJedsB_OaEo -n osher-app
+ -sO http://192.168.49.1:8080/jnlpJars/agent.jar
+java -jar agent.jar -url http://192.168.49.1:8080/ -secret 2a12bb4b3b569372c767f64235efd991e44ceba7e51c305ad187ee1d00930b95 -name "kubernetes clouds" -workDir "/var/lib/jenkins"

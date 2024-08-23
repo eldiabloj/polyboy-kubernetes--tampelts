@@ -1,0 +1,10 @@
+apiVersion: v2
+name: polybot-app
+description: A Helm chart for my polybot application deployment
+version: 0.0.1
+appVersion: 0.0.1
+
+
+
+#helm package ./nginx-app
+#helm install polybot-app-0.0.1.tgz ./polybot-app
