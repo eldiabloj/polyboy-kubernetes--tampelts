@@ -1,0 +1,58 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: jenkins-agent
+                image: jenkins/jenkins:lts
+                command:
+                - cat
+                tty: true
+                volumeMounts:
+                - name: kubeconfig
+                  mountPath: /root/.kube
+              volumes:
+              - name: kubeconfig
+                configMap:
+                  name: kubeconfig
+            '''
+        }
+    }
+
+    environment {
+        HELM_CHART = "nginx-chart"
+        KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+
+
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Use Helm to deploy to Kubernetes
+                    sh "helm upgrade --install nginx-fe nginx-app-0.1.0.tgz --kubeconfig /root/.kube/config --namespace jenkins"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Clean up
+                cleanWs()
+            }
+        }
+    }
+}
