@@ -7,13 +7,10 @@ pipeline {
             spec:
               containers:
               - name: jenkins-agent
-                image: jenkins/jenkins:lts
+                image: jenkins-agent:latest
                 command:
                 - cat
                 tty: true
-                volumeMounts:
-                - name: kubeconfig
-                  mountPath: /root/.kube
               volumes:
               - name: kubeconfig
                 configMap:
@@ -23,7 +20,8 @@ pipeline {
     }
 
     environment {
-        HELM_CHART = "nginx-chart"
+        IMG_NAME = "polybot:${BUILD_NUMBER}"
+        DOCKER_REGISTRY = "eldiabloj/polybot"
         KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
     }
 
@@ -34,28 +32,97 @@ pipeline {
             }
         }
 
-    stage('Prepare Helm Chart') {
+        stage('Test') {
             steps {
                 script {
-                    // Ensure the Helm chart is available. Adjust the path as needed.
-                    sh "ls -l ${HELM_CHART}-*.tgz"
+                    docker.image("${DOCKER_REGISTRY}:${BUILD_NUMBER}").inside("-w /app") {
+                        sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install --upgrade pip
+                        pip install mastodon.py tweepy
+                        grep -v 'polybot' app/requirements.txt > temp_requirements.txt
+                        pip install -r temp_requirements.txt
+                        rm temp_requirements.txt
+                        pylint --disable=C0301,C0114,E1101,C0116,C0103,W0718,E0401,W0613,R1722,W0612,R0912,C0304,C0115,R1705,E1136 app/polybot/*.py
+                        deactivate
+                        '''
+                    }
                 }
             }
         }
 
+        stage('Verify Docker Image') {
+            steps {
+                script {
+                    sh "docker images ${IMG_NAME}"
+                }
+            }
+        }
 
+        stage('Snyk Scan') {
+            steps {
+                script {
+                    withCredentials([
+                        string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')
+                    ]) {
+                        sh "snyk auth ${SNYK_TOKEN}"
+                        echo "snyk container test ${IMG_NAME} --policy-path=.snyk"
+                    }
+                }
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                script {
+                    echo "Starting Unit Tests"
+                    docker.image("${DOCKER_REGISTRY}:${BUILD_NUMBER}").inside {
+                        sh '''
+                        echo "Current directory:"
+                        pwd
+
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install --upgrade pip
+                        pip install mastodon.py tweepy
+                        grep -v 'polybot' app/requirements.txt > temp2_requirements.txt
+                        pip install -r temp2_requirements.txt
+                        rm temp2_requirements.txt
+                        pip install pytest-xdist pytest-timeout
+
+                        # Run pytest with verbosity and timeout for each test
+                        python3 -m pytest -n 4 --timeout=60 --junitxml results.xml app/test/*.py
+                        deactivate
+                        '''
+                    }
+                    echo "Unit Tests completed"
+                }
+            }
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Use Helm to deploy to Kubernetes
-                    sh """
-                    helm upgrade --install nginx-fe ${HELM_CHART}-0.1.0.tgz \
-                      --kubeconfig /root/.kube/config \
-                      --namespace jenkins || helm install nginx-fe ${HELM_CHART}-0.1.0.tgz \
-                      --kubeconfig /root/.kube/config \
-                      --namespace jenkins
-                    """
+                    // Deploy the application to the demo_app namespace using app_deployments.yaml
+                    sh "kubectl apply -f app_deployments.yaml --namespace jenkins --kubeconfig /root/.kube/config"
+                }
+            }
+        }
+
+        stage('Run from Another Repository') {
+            steps {
+                script {
+                    sh '''
+                    # Clone the repository containing my.py
+                    git clone https://github.com/eldiabloj/osher-s-shared-lib.git
+
+                    # Change directory to the cloned repository
+                    cd osher-s-shared-lib
+
+                    # Run the my.py script
+                    python3 my.py
+                    '''
                 }
             }
         }
@@ -64,7 +131,18 @@ pipeline {
     post {
         always {
             script {
-                // Clean up
+                // Stop and remove any running containers related to this build
+                sh """
+                    docker ps -q -f ancestor=${DOCKER_REGISTRY}:${BUILD_NUMBER} | xargs -r docker stop
+                    docker ps -a -q -f ancestor=${DOCKER_REGISTRY}:${BUILD_NUMBER} | xargs -r docker rm -f
+                """
+
+                // Remove images related to this build except the latest
+                sh """
+                    docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep '${DOCKER_REGISTRY}' | grep -v ':latest' | grep -v ':${BUILD_NUMBER}' | awk '{print \$2}' | xargs -r docker rmi -f
+                """
+
+                // Clean workspace
                 cleanWs()
             }
         }
