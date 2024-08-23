@@ -34,6 +34,14 @@ pipeline {
             }
         }
 
+    stage('Prepare Helm Chart') {
+            steps {
+                script {
+                    // Ensure the Helm chart is available. Adjust the path as needed.
+                    sh "ls -l ${HELM_CHART}-*.tgz"
+                }
+            }
+        }
 
 
 
@@ -41,7 +49,13 @@ pipeline {
             steps {
                 script {
                     // Use Helm to deploy to Kubernetes
-                    sh "helm upgrade --install nginx-fe nginx-app-0.1.0.tgz --kubeconfig /root/.kube/config --namespace jenkins"
+                    sh """
+                    helm upgrade --install nginx-fe ${HELM_CHART}-0.1.0.tgz \
+                      --kubeconfig /root/.kube/config \
+                      --namespace jenkins || helm install nginx-fe ${HELM_CHART}-0.1.0.tgz \
+                      --kubeconfig /root/.kube/config \
+                      --namespace jenkins
+                    """
                 }
             }
         }
