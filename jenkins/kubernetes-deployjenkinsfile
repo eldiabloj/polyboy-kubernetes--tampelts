@@ -11,10 +11,7 @@ pipeline {
                 command:
                 - cat
                 tty: true
-              volumes:
-              - name: kubeconfig
-                configMap:
-                  name: kubeconfig
+
             '''
         }
     }
