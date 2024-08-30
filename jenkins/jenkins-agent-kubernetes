@@ -19,9 +19,6 @@ pipeline {
                 echo 'Running in a Kubernetes Pod'
             }
         }
-    }
-
-    stages {
         stage('Run a shell command') {
             steps {
                 container('jnlp') {
