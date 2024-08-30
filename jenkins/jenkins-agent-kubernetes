@@ -7,9 +7,10 @@ pipeline {
             kind: Pod
             spec:
               containers:
-              - name: jnlp
+              - name: jenkins-agent
                 image: jenkins/inbound-agent
-                args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+                args: ["-url", "http://<jenkins-master-url>:8080", "-workDir", "/home/jenkins/agent", "<secret>", "<agent-name>"]
+
             """
         }
     }

@@ -17,6 +17,7 @@ pipeline {
 
     environment {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
+        JENKINS_URL = 'http://192.168.49.1:8080'
         DOCKER_REGISTRY = "eldiabloj/polybot"
         KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
     }
