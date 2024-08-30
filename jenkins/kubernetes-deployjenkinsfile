@@ -22,20 +22,12 @@ pipeline {
         KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-
-
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // Deploy the application to the demo_app namespace using app_deployments.yaml
-                    sh "kubectl apply -f app_deployments.yaml --namespace jenkins --kubeconfig /root/.kube/config"
+                    sh "helm install nginx-fe nginx-app-0.1.0.tgz -n jenkins --kubeconfig /root/.kube/config"
+                    sh "helm install polybot-be polybot-app-0.0.1.tgz -n jenkins --kubeconfig /root/.kube/config"
                 }
             }
         }
