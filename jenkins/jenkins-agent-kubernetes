@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom jenkins-agent-kubernetes // replace 'default-agent' with the appropriate pod template
+            inheritFrom 'jenkins-agent-kubernetes' // replace 'default-agent' with the appropriate pod template
             yaml """
             apiVersion: v1
             kind: Pod
