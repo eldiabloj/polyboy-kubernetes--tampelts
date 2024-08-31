@@ -13,12 +13,7 @@ pipeline {
             """
         }
     }
-    stages {
-        stage('Test') {
-            steps {
-                echo 'Running in a Kubernetes Pod'
-            }
-        }
+
         stage('Run a shell command') {
             steps {
                 container('jnlp') {
