@@ -7,8 +7,10 @@ pipeline {
             kind: Pod
             spec:
               containers:
-              - name: jnlp
-                image: jenkins/inbound-agent
+          - name: docker-agent
+            image: eldiabloj/dockerfile_agent:latest
+            command:
+
                 resources:
                   requests:
                     memory: "512Mi"
