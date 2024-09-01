@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'jenkins-agent-kubernetes' // Use the appropriate pod template
+            inheritFrom 'jenkins-agent-kubernetes'
             yaml """
             apiVersion: v1
             kind: Pod
@@ -9,11 +9,25 @@ pipeline {
               containers:
               - name: jnlp
                 image: jenkins/inbound-agent
+                resources:
+                  requests:
+                    memory: "512Mi"
+                    cpu: "500m"
+                  limits:
+                    memory: "1Gi"
+                    cpu: "1000m"
                 command:
                 - cat
                 tty: true
               - name: shell
-                image: alpine  # Using Alpine instead of BusyBox
+                image: alpine
+                resources:
+                  requests:
+                    memory: "256Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "512Mi"
+                    cpu: "500m"
                 command:
                 - cat
                 tty: true
@@ -24,13 +38,10 @@ pipeline {
         stage('Run a shell command') {
             steps {
                 container('shell') {
-                    sh 'echo "Hello from Kubernetes agent!"'
+                    // Adding sleep to give time for container initialization
+                    sh 'sleep 5 && echo "Hello from Kubernetes agent!"'
                 }
             }
         }
     }
 }
-
-
-
-
