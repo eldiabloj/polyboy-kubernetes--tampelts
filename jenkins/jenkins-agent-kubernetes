@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'jenkins-agent-kubernetes' // replace 'default-agent' with the appropriate pod template
+            inheritFrom 'jenkins-agent-kubernetes' // Use the appropriate pod template
             yaml """
             apiVersion: v1
             kind: Pod
@@ -9,17 +9,23 @@ pipeline {
               containers:
               - name: jnlp
                 image: jenkins/inbound-agent
-                args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+                command:
+                - cat
+                tty: true
             """
         }
     }
     stages {
         stage('Run a shell command') {
             steps {
-                container('jnlp') {
+                container('shell') {
                     sh 'set -x && echo "Hello from Kubernetes agent!"'
                 }
             }
         }
     }
 }
+
+
+
+//args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']

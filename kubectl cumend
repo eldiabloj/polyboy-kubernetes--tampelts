@@ -25,3 +25,7 @@ hh install polybot-be polybot-app-0.0.1.tgz
 kubectl create secret generic telegram-token --from-literal=TELEGRAM_TOKEN=6648578545:AAFNnFkbsJZOZiRu6TenQ7ufwJedsB_OaEo -n osher-app
  -sO http://192.168.49.1:8080/jnlpJars/agent.jar
 java -jar agent.jar -url http://192.168.49.1:8080/ -secret 2a12bb4b3b569372c767f64235efd991e44ceba7e51c305ad187ee1d00930b95 -name "kubernetes clouds" -workDir "/var/lib/jenkins"
+kubectl cluster-info --context kind-kind
+kubectl create serviceaccount jenkins --namespace=jenkins
+kubectl describe secret $(kubectl describe serviceaccount jenkins --namespace=jenkins | grep Token | awk '{print $2}') --namespace=jenkins
+
