@@ -39,7 +39,7 @@ pipeline {
             steps {
                 container('shell') {
                     // Adding sleep to give time for container initialization
-                    echo "Hello from Kubernetes agent!"'
+                    echo "Hello from Kubernetes agent!"
                 }
             }
         }
