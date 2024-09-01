@@ -13,7 +13,7 @@ pipeline {
                 - cat
                 tty: true
               - name: shell
-                image: busybox
+                image: alpine  # Using Alpine instead of BusyBox
                 command:
                 - cat
                 tty: true
@@ -30,6 +30,7 @@ pipeline {
         }
     }
 }
+
 
 
 
