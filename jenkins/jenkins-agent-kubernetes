@@ -12,6 +12,11 @@ pipeline {
                 command:
                 - cat
                 tty: true
+              - name: shell
+                image: busybox
+                command:
+                - cat
+                tty: true
             """
         }
     }
@@ -28,4 +33,3 @@ pipeline {
 
 
 
-//args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
