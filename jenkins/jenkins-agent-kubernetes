@@ -38,8 +38,8 @@ pipeline {
         stage('Run a shell command') {
             steps {
                 container('shell') {
-                    // Adding sleep to give time for container initialization
-                    sh 'echo "Hello from Kubernetes agent!"'
+
+                    sh 'echo "Hello from Kubernetes agent!" && sleep 10'
                 }
             }
         }
