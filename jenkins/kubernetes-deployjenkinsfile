@@ -7,7 +7,7 @@ pipeline {
             spec:
               containers:
               - name: jenkins-agent
-                image: jenkins/inbound-agent
+                image: eldiabloj/dockerfile_agent:latest
                 command:
                 - cat
                 tty: true
