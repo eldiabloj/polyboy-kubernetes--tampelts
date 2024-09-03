@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nginx-pvc
-  namespace: jenkins
+  name: {{ .Values.pvc.name }}
+  namespace: {{ .Release.Namespace }}   # Set namespace properly
 spec:
   accessModes:
-    - ReadWriteOnce
+    {{- range .Values.pvc.accessModes }}
+    - {{ . }}
+    {{- end }}
   resources:
     requests:
-      storage: {{ .Values.storage }}  # Pull from values.yaml
+      storage: {{ .Values.pvc.resources.requests.storage }}
