@@ -21,7 +21,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: telegram-token
-              key: {{ .Values.telegramToken }}
+              key:
         resources:
           requests:
             memory: "{{ .Values.resources.requests.memory }}"
