@@ -15,7 +15,7 @@ hpa:
   minReplicas: 1
   maxReplicas: 5
   averageUtilization: 50
-  telegramToken: "NjY0ODU3ODU0NTpBQUZObkZrYnNKWk9aaVJ1NlRlblE3dWZ3SmVkc0JfT2FFbw=="
+telegramToken: "NjY0ODU3ODU0NTpBQUZObkZrYnNKWk9aaVJ1NlRlblE3dWZ3SmVkc0JfT2FFbw=="
 
 
 
