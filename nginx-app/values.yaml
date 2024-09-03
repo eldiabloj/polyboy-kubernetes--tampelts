@@ -1,7 +1,14 @@
 storage: 1Gi
+pvc:
+  name: nginx-pvc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 deployment:
   name: nginx-deployment
-replicas: 3
+  replicas: 3
 appName: nginx
 container:
   name: nginx
@@ -18,3 +25,7 @@ resources:
     cpu: 500m
 volume:
   mountPath: /var/www/html
+hpa:
+  minReplicas: 2
+  maxReplicas: 5
+  averageUtilization: 50

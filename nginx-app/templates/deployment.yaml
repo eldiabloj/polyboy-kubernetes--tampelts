@@ -1,89 +1,95 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
-  namespace: {{ .Release.Namespace }}  # Specify namespace
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Release.Namespace }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app: nginx
+      app: {{ .Values.appName }}
   template:
     metadata:
       labels:
-        app: nginx
+        app: {{ .Values.appName }}
     spec:
       containers:
-      - name: nginx
-        image: eldiabloj/nginx:latest
+      - name: {{ .Values.container.name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
-        - containerPort: 8005
+        - containerPort: {{ .Values.container.port }}
         resources:
           requests:
-            memory: "64Mi"
-            cpu: "250m"
+            memory: "{{ .Values.resources.requests.memory }}"
+            cpu: "{{ .Values.resources.requests.cpu }}"
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
         volumeMounts:
         - name: nginx-data
-          mountPath: /var/www/html  # Or any desired mount path
+          mountPath: {{ .Values.volume.mountPath }}
       volumes:
       - name: nginx-data
         persistentVolumeClaim:
-          claimName: nginx-pvc
+          claimName: {{ .Values.pvc.name }}
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nginx-pvc
-  namespace:
+  name: {{ .Values.pvc.name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    {{- range .Values.pvc.accessModes }}
+    - {{ . }}
+    {{- end }}
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.pvc.resources.requests.storage }}
+
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: nginx-deployment-hpa
-  namespace:
+  name: {{ .Values.deployment.name }}-hpa
+  namespace: {{ .Release.Namespace }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: nginx-deployment
-  minReplicas: 2
-  maxReplicas: 5
+    name: {{ .Values.deployment.name }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: {{ .Values.hpa.averageUtilization }}
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
-  namespace:
+  name: {{ .Values.deployment.name }}-service
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
-    app: nginx
+    app: {{ .Values.appName }}
   ports:
     - protocol: TCP
-      port: 8005
-      targetPort: 8005
+      port: {{ .Values.container.port }}
+      targetPort: {{ .Values.container.port }}
   type: NodePort
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress
-  namespace:
+  name: {{ .Values.deployment.name }}-ingress
+  namespace: {{ .Release.Namespace }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -95,6 +101,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx-service
+            name: {{ .Values.deployment.name }}-service
             port:
-              number: 8005
+              number: {{ .Values.container.port }}
