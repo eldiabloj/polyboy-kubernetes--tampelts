@@ -4,7 +4,6 @@ env:
     secretKeyRef:
       name: telegram-token   # This is the name of the secret
       key: TELEGRAM_TOKEN    # This is the key inside the secret (the valid key name)
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,7 +27,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: telegram-token
-              key: "NjY0ODU3ODU0NTpBQUZObkZrYnNKWk9aaVJ1NlRlblE3dWZ3SmVkc0JfT2FFbw=="
+              key: TELEGRAM_TOKEN
         resources:
           requests:
             memory: "{{ .Values.resources.requests.memory }}"
