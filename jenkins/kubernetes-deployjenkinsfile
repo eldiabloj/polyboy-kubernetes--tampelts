@@ -27,8 +27,8 @@ pipeline {
             steps {
                 script {
                     // Deploy the application to the demo_app namespace using app_deployments.yaml
-                    sh "helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config -set storage.backend=configmap "
-                    sh "helm install polybot-be /home/oj/PycharmProjects/kubetnetes/nginx-app/polybot-app-0.0.1.tgz -n jenkins --kubeconfig /home/oj/.kube/config -set storage.backend=configmap "
+                    sh "helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config --set storage.backend=configmap "
+                    sh "helm install polybot-be /home/oj/PycharmProjects/kubetnetes/nginx-app/polybot-app-0.0.1.tgz -n jenkins --kubeconfig /home/oj/.kube/config --set storage.backend=configmap "
                 }
             }
         }
