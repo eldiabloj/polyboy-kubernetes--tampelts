@@ -28,8 +28,7 @@ pipeline {
                 script {
                     // Deploy the application to the demo_app namespace using app_deployments.yaml
 
-                    sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
-
+                    sh "export HELM_DRIVER=configmap && helm install polybot-be /home/oj/PycharmProjects/kubetnetes/polybot-app/polybot-app-0.0.1.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
                 }
             }
         }
@@ -37,8 +36,3 @@ pipeline {
 }
 
 
-
-
-
-
-//--set storage.backend=configmap
