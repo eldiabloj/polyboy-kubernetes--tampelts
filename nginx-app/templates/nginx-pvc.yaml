@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: nginx-pvc
-  namespace: {{ .Release.Namespace }}  # Use Helm template variable for namespace
+  namespace: jenkins
 spec:
   accessModes:
     - ReadWriteOnce
