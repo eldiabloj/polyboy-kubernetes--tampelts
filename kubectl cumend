@@ -29,6 +29,8 @@ kubectl cluster-info --context kind-kind
 kubectl create serviceaccount jenkins --namespace=jenkins
 kubectl describe secret $(kubectl describe serviceaccount jenkins --namespace=jenkins | grep Token | awk '{print $2}') --namespace=jenkins
 
-    kubectl cp /home/oj/Desktop/jenkins_home_backup.tar.gz jenkins/jenkins-5b86677ff-f9lg6:/var/jenkins_home/jenkins_home_backup.tar.gz
+kubectl cp /home/oj/Desktop/jenkins_home_backup.tar.gz jenkins/jenkins-5b86677ff-f9lg6:/var/jenkins_home/jenkins_home_backup.tar.gz
 tar -xzvf jenkins_backup.tar.gz -C /var/jenkins_home
 u/l/b.sh
+ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgres-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+ kubectl run postgres-postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:11.7.0-debian-10-r9 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgres-postgresql -U postgres -d helm -p 5432
