@@ -1,3 +1,10 @@
+env:
+- name: TELEGRAM_TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: telegram-token   # This is the name of the secret
+      key: TELEGRAM_TOKEN    # This is the key inside the secret (the valid key name)
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
