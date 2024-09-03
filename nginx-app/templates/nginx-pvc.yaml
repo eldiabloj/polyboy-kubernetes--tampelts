@@ -1,10 +1,11 @@
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: nginx-pvc
+  namespace: {{ .Release.Namespace }}  # Use Helm template variable for namespace
 spec:
   accessModes:
-   - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
-      storage:  1Gi
+      storage: {{ .Values.storage }}  # Pull from values.yaml

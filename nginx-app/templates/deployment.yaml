@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-  namespace:
+  namespace: {{ .Release.Namespace }}  # Specify namespace
 spec:
   replicas: 3
   selector:
