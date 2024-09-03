@@ -10,7 +10,7 @@ resources:
   limits:
     memory: 128Mi
     cpu: 500m
-namespace: osher-app
+namespace:
 hpa:
   minReplicas: 1
   maxReplicas: 5
