@@ -10,11 +10,6 @@ spec:
     env:
     - name: JENKINS_URL
       value: 'http:// 10.101.66.101:8080'
-    - name: JENKINS_SECRET
-      valueFrom:
-        secretKeyRef:
-          name: jenkins-agent-secret
-          key: jnlp-secret
   - name: jenkins-agent
     image: eldiabloj/dockerfile_agent:latest
     command:
