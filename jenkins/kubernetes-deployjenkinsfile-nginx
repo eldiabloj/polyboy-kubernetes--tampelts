@@ -8,6 +8,7 @@ pipeline {
               containers:
               - name: jenkins-agent
                 image: eldiabloj/dockerfile_agent:latest
+                args: ['-webSocket']
                 command:
                 - cat
                 tty: true
