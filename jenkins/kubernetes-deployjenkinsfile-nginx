@@ -1,22 +1,24 @@
 pipeline {
     agent {
-        kubernetes {
-            yaml '''
-            apiVersion: v1
-            kind: Pod
-            spec:
-              containers:
-              - name: jnlp
-                image: jenkins/inbound-agent:latest
-                args: ['${computer.jnlpmac}', '${computer.name}']
-              - name: jenkins-agent
-                image: eldiabloj/dockerfile_agent:latest
-                command:
-                - sh
-                - -c
-                - 'while true; do sleep 30; done'
-                tty: true
-            '''
+        apiVersion: v1
+        kind: Pod
+    spec:
+      containers:
+      - name: jnlp
+        image: jenkins/inbound-agent:latest
+        args: ['${computer.jnlpmac}', '${computer.name}']
+        env:
+        - name: JENKINS_URL
+          value: 'http://192.168.49.1:8081'  # Adjust this to your Jenkins URL
+        - name: jenkins-agent
+          image: eldiabloj/dockerfile_agent:latest
+          command:
+          - sh
+          - -c
+          - 'while true; do sleep 30; done'
+          tty: true
+
+             '''
         }
     }
 
