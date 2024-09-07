@@ -1,24 +1,25 @@
 pipeline {
     agent {
-        apiVersion: v1
-        kind: Pod
-    spec:
-      containers:
-      - name: jnlp
-        image: jenkins/inbound-agent:latest
-        args: ['${computer.jnlpmac}', '${computer.name}']
-        env:
-        - name: JENKINS_URL
-          value: 'http://192.168.49.1:8081'  # Adjust this to your Jenkins URL
-        - name: jenkins-agent
-          image: eldiabloj/dockerfile_agent:latest
-          command:
-          - sh
-          - -c
-          - 'while true; do sleep 30; done'
-          tty: true
-
-             '''
+        kubernetes {
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: jnlp
+                image: jenkins/inbound-agent:latest
+                args: ['${computer.jnlpmac}', '${computer.name}']
+                env:
+                - name: JENKINS_URL
+                  value: 'http://192.168.49.1:8081'  # Adjust this to your Jenkins URL
+              - name: jenkins-agent
+                image: eldiabloj/dockerfile_agent:latest
+                command:
+                - sh
+                - -c
+                - 'while true; do sleep 30; done'
+                tty: true
+            '''
         }
     }
 
@@ -26,7 +27,7 @@ pipeline {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         JENKINS_URL = 'http://192.168.49.1:8081'
         DOCKER_REGISTRY = "eldiabloj/polybot"
-        KUBECONFIG = credentials('kubeSAtoken')
+        KUBECONFIG = credentials('kubeSAtoken')  // Ensure this is correctly set up in Jenkins
     }
 
     stages {
