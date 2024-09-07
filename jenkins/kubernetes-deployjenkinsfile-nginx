@@ -25,7 +25,7 @@ pipeline {
 
     environment {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
-        JENKINS_URL = 'http://10.101.66.101:8080'  # Adjust to your Jenkins URL
+        JENKINS_URL = 'http://10.101.66.101:8080'
         DOCKER_REGISTRY = "eldiabloj/polybot"
         KUBECONFIG = credentials('kubeSAtoken')  // Ensure this is correctly set up in Jenkins
     }
