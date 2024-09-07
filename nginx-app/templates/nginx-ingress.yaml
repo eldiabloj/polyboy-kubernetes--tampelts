@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: ubuntu.myguest.virtualbox.org
+  - host: cubr.myguest.virtualbox.org
     http:
       paths:
       - path: /
