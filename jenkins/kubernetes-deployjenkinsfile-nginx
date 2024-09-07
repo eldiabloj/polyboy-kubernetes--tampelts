@@ -10,7 +10,9 @@ pipeline {
                 image: eldiabloj/dockerfile_agent:latest
                 args: ['-webSocket']
                 command:
-                - cat
+                - sh
+                - -c
+                - 'while true; do sleep 30; done'
                 tty: true
             '''
         }
@@ -20,21 +22,17 @@ pipeline {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         JENKINS_URL = 'http://192.168.49.1:8081'
         DOCKER_REGISTRY = "eldiabloj/polybot"
-        KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
+        KUBECONFIG = credentials('kubeSAtoken')
     }
 
     stages {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Deploy the application to the demo_app namespace using app_deployments.yaml
-
+                    // Deploy the application using Helm
                     sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
-
                 }
             }
         }
     }
 }
-
-
