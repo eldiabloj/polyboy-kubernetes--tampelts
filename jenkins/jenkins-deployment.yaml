@@ -13,12 +13,13 @@ spec:
       labels:
         app: jenkins
     spec:
-      serviceAccountName: jenkins  # Add this line to specify the service account
+      serviceAccountName: jenkins
       containers:
       - name: jenkins
         image: jenkins/jenkins:latest
         ports:
         - containerPort: 8080
+        - containerPort: 50000
         volumeMounts:
         - name: jenkins-data
           mountPath: /var/jenkins_home
