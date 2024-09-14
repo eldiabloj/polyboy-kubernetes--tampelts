@@ -46,9 +46,9 @@ pipeline {
             steps {
                 script {
                     container('jenkins-agent') {
-                        sh 'echo "Checking Kubernetes status"'
-                        sh 'kubectl get pods -n jenkins'
-                        sh 'kubectl describe pod $(kubectl get pods -n jenkins -o=jsonpath="{.items[0].metadata.name}") -n jenkins'
+                        sh 'echo "Debugging Jenkins Agent"'
+                        sh 'ls -l /path/to/important/directory'
+                        sh 'env'
                     }
                 }
             }
