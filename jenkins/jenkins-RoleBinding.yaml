@@ -2,14 +2,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: jenkins-role-binding
-  namespace: kube-system
+  namespace: jenkins
 subjects:
   - kind: ServiceAccount
     name: jenkins
     namespace: jenkins
 roleRef:
   kind: Role
-  name: jenkins-role
+  name: jenkins-roles
   apiGroup: rbac.authorization.k8s.io
 
 ---
@@ -20,5 +20,5 @@ metadata:
   name: jenkins-pod-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "pods/log"]
-  verbs: ["get", "list", "watch"]
+  resources: ["pods", "pods/log", "services", "deployments", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]

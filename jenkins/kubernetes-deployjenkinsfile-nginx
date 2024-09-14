@@ -23,6 +23,10 @@ pipeline {
                 volumeMounts:
                 - name: docker-sock
                   mountPath: /var/run/docker.sock
+              - name: jnlp
+                 image: jenkins/inbound-agent
+                 args:
+                 - -url http://10.101.66.101:8080
               volumes:
               - name: docker-sock
                 emptyDir: {}
