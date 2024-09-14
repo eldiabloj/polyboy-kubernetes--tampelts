@@ -23,10 +23,10 @@ pipeline {
                 volumeMounts:
                 - name: docker-sock
                   mountPath: /var/run/docker.sock
-              - name: jnlp
-                 image: eldiabloj/dockerfile_agent:latest
-                 args:
-                 - -url http://10.101.66.101:8080
+              - name: jnlp  # Corrected indentation
+                image: eldiabloj/dockerfile_agent:latest
+                args:
+                - -url http://10.101.66.101:8080
               volumes:
               - name: docker-sock
                 emptyDir: {}
@@ -45,15 +45,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Use the Jenkins agent container
                     container('jenkins-agent') {
-                        // Debugging steps
                         sh 'echo "Checking Kubernetes configuration"'
                         sh 'kubectl get pods -n jenkins'
-                        // Replace <pod-name> with a specific pod name or parameterize it
-                        // sh 'kubectl describe pod <pod-name> -n jenkins'
-
-                        // Deploy the application using Helm
                         sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
                     }
                 }
@@ -61,4 +55,3 @@ pipeline {
         }
     }
 }
-
