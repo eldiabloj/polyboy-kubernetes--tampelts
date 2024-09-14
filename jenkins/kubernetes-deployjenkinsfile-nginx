@@ -18,6 +18,8 @@ pipeline {
                 image: docker:dind
                 securityContext:
                   privileged: true
+                args:
+                - --storage-driver=overlay2
                 volumeMounts:
                 - name: docker-sock
                   mountPath: /var/run/docker.sock
@@ -36,16 +38,25 @@ pipeline {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         JENKINS_URL = 'http://10.101.66.101:8080'
         DOCKER_REGISTRY = "eldiabloj/polybot"
-        KUBECONFIG = credentials('kubeSAtoken')  // Ensure this is correctly set up in Jenkins
+        KUBECONFIG = credentials('kubeSAtoken')
     }
 
     stages {
+        stage('Debugging') {
+            steps {
+                script {
+                    container('jenkins-agent') {
+                        sh 'echo "Checking Kubernetes status"'
+                        sh 'kubectl get pods -n jenkins'
+                        sh 'kubectl describe pod $(kubectl get pods -n jenkins -o=jsonpath="{.items[0].metadata.name}") -n jenkins'
+                    }
+                }
+            }
+        }
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     container('jenkins-agent') {
-                        sh 'echo "Checking Kubernetes configuration"'
-                        sh 'kubectl get pods -n jenkins'
                         sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
                     }
                 }
