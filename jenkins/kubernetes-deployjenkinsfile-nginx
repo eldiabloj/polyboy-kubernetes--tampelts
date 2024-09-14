@@ -9,9 +9,9 @@ pipeline {
               - name: jenkins-agent
                 image: eldiabloj/dockerfile_agent:latest
                 command:
-                - sh
-                - -c
-                - 'while true; do sleep 30; done'
+                - dockerd
+                args:
+                - --group=1000
                 tty: true
             '''
         }
@@ -40,3 +40,4 @@ pipeline {
         }
     }
 }
+
