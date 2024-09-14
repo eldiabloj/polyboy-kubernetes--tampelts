@@ -9,10 +9,23 @@ pipeline {
               - name: jenkins-agent
                 image: eldiabloj/dockerfile_agent:latest
                 command:
-                - dockerd
-                args:
-                - --group=1000
+                - cat
                 tty: true
+                volumeMounts:
+                - name: docker-sock
+                  mountPath: /var/run/docker.sock
+              - name: docker
+                image: docker:dind
+                securityContext:
+                  privileged: true
+                args:
+                - --storage-driver=overlay2
+                volumeMounts:
+                - name: docker-sock
+                  mountPath: /var/run/docker.sock
+              volumes:
+              - name: docker-sock
+                emptyDir: {}
             '''
         }
     }
@@ -28,13 +41,17 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Debugging steps
-                    sh 'echo "Checking Kubernetes configuration"'
-                    sh 'kubectl get pods -n jenkins'
-                    sh 'kubectl describe pod <pod-name> -n jenkins'
+                    // Use the Jenkins agent container
+                    container('jenkins-agent') {
+                        // Debugging steps
+                        sh 'echo "Checking Kubernetes configuration"'
+                        sh 'kubectl get pods -n jenkins'
+                        // Replace <pod-name> with a specific pod name or parameterize it
+                        // sh 'kubectl describe pod <pod-name> -n jenkins'
 
-                    // Deploy the application using Helm
-                    sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
+                        // Deploy the application using Helm
+                        sh "export HELM_DRIVER=configmap && helm install nginx-fe /home/oj/PycharmProjects/kubetnetes/nginx-app/nginx-app-0.1.0.tgz -n jenkins --kubeconfig /home/oj/.kube/config"
+                    }
                 }
             }
         }
