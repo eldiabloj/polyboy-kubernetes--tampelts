@@ -11,25 +11,6 @@ pipeline {
                 command:
                 - cat
                 tty: true
-                volumeMounts:
-                - name: docker-sock
-                  mountPath: /var/run/docker.sock
-              - name: docker
-                image: docker:dind
-                securityContext:
-                  privileged: true
-                args:
-                - --storage-driver=overlay2
-                volumeMounts:
-                - name: docker-sock
-                  mountPath: /var/run/docker.sock
-              - name: jnlp  # Corrected indentation
-                image: eldiabloj/dockerfile_agent:latest
-                args:
-                - -url http://10.101.66.101:8080
-              volumes:
-              - name: docker-sock
-                emptyDir: {}
             '''
         }
     }
