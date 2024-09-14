@@ -24,7 +24,7 @@ pipeline {
                 - name: docker-sock
                   mountPath: /var/run/docker.sock
               - name: jnlp
-                 image: jenkins/inbound-agent
+                 image: eldiabloj/dockerfile_agent:latest
                  args:
                  - -url http://10.101.66.101:8080
               volumes:
