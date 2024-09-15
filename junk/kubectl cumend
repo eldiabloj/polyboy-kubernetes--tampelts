@@ -34,3 +34,5 @@ tar -xzvf jenkins_backup.tar.gz -C /var/jenkins_home
 u/l/b.sh
  export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgres-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
  kubectl run postgres-postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:11.7.0-debian-10-r9 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgres-postgresql -U postgres -d helm -p 5432
+ kubectl port-forward svc/argocd-server -n argocd 8082:443
+ ngrok http 10.96.40.71:8005

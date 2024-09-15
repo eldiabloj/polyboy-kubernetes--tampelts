@@ -33,4 +33,5 @@ i usd official installation guide provided by the Argocd project to install it.
 #step 4 Configure Argocd is an absolut need to define the applications you want to deploy and their associated parameters and settings. You can do this by creating YAML files that describe the desired state of your Kubernetes resources
 
 #5 cent be done becose of my jenkins conectivi/communication problems
+
 #6 cent be done becose of my jenkins conectivi/communication problems
