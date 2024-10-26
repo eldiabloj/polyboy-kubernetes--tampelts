@@ -12,7 +12,7 @@ pipeline {
         kubeconfig_path = "~/.kube/config"      // Path to kubeconfig
         namespace = "osher-polyapp"             // Kubernetes namespace
         sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-polyapp-deployment" // Replace with your SNS Topic ARN
-        helm_chart_path = "/home/ubuntu"
+        helm_chart_path = "/home/ubuntu/"
         git_repo_url = "https://github.com/eldiabloj/polyboy-kubernetes--tampelts.git" // Replace with your Git repository URL
     }
 
