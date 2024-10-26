@@ -60,7 +60,7 @@ pipeline {
                 script {
                     sh """
                         export HELM_DRIVER=configmap
-                        helm install polybot-backand ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
+                        helm install polybot-be ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
                     """
                 }
             }
