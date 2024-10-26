@@ -46,7 +46,7 @@ pipeline {
                         echo "Helm chart not found. Cloning from Git..."
                         sh """
                             git clone ${git_repo_url} /tmp/polybot-app
-                            cp /tmp/polybot-app/polybot-app-0.0.1.tgz ${env.helm_chart_path}
+                            cp /tmp/polybot-app/polybot-app/polybot-app-0.0.1.tgz ${env.helm_chart_path}
                         """
                     } else {
                         echo "Helm chart found locally."
