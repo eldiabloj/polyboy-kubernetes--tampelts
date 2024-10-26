@@ -4,7 +4,6 @@ pipeline {
     environment {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         DOCKER_REGISTRY = "eldiabloj/polybot"
-        KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
         aws_region = "us-east-2"               // Replace with your AWS region
         ecr_registry = "023196572641.dkr.ecr.us-east-2.amazonaws.com/osher-ecr:latest"
         ecr_repo = "${ecr_registry}/osher-ecr:latest" // Replace with your ECR repository
@@ -43,7 +42,7 @@ pipeline {
                 script {
                     sh """
                         export HELM_DRIVER=configmap
-                        helm install polybot-be /home/oj/PycharmProjects/kubetnetes/polybot-app/polybot-app-0.0.1.tgz \
+                        helm install polybot-be /mnt/c/Users/oshrb/polyboy-kubernetes--tampelts/polybot-app/polybot-app-0.0.1.tgz \
                         -n ${namespace} --kubeconfig ${kubeconfig_path}
                     """
                 }
