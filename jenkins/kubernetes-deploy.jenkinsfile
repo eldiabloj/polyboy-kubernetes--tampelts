@@ -42,7 +42,7 @@ pipeline {
                 script {
                     sh """
                         export HELM_DRIVER=configmap
-                        helm install polybot-be /mnt/c/Users/oshrb/polyboy-kubernetes--tampelts/polybot-app/polybot-app-0.0.1.tgz \
+                        helm install polybot-be /mnt/c/Users/oshrb/polyboy-kubernetes--tampelts/polybot-app/polybot-app-0.0.1.tgz
                         -n ${namespace} --kubeconfig ${kubeconfig_path}
                     """
                 }
