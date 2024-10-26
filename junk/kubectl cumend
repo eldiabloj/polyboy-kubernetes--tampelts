@@ -36,3 +36,36 @@ u/l/b.sh
  kubectl run postgres-postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:11.7.0-debian-10-r9 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgres-postgresql -U postgres -d helm -p 5432
  kubectl port-forward svc/argocd-server -n argocd 8082:443
  ngrok http 10.96.40.71:8005
+kubectl exec -it release-jenkins-0 -n osher-jenkins -- bin/bash
+kubectl delete all --all -n <your-namespace>
+helm uninstall <release-name> -n <your-namespace>
+helm list -n <your-namespace>
+
+
+
+
+
+
+
+
+
+
+
+
+
+// kubernetes {
+            yaml '''
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: jenkins-agent
+                image: eldiabloj/dockerfile_agent:latest
+                command:
+                - cat
+                tty: true
+            '''
+        }
+    }
+
+//-

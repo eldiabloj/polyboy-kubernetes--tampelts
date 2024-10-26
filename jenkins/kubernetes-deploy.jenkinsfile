@@ -7,7 +7,7 @@ pipeline {
         DOCKER_REGISTRY = "eldiabloj/polybot"
         KUBECONFIG = credentials('kubeSAtoken') // Ensure you have a Kubernetes config credential
         aws_region = "us-east-2"               // Replace with your AWS region
-        ecr_registry = 023196572641.dkr.ecr.us-east-2.amazonaws.com/osher-ecr:latest // Replace with your AWS ECR registry
+        ecr_registry = "023196572641.dkr.ecr.us-east-2.amazonaws.com/osher-ecr:latest"
         ecr_repo = "${ecr_registry}/osher-ecr:latest" // Replace with your ECR repository
         image_tag = "latest, polybot"           // Image tag from the build pipeline
         cluster_name = "eks-X10-prod-01"     // Replace with your EKS cluster name
