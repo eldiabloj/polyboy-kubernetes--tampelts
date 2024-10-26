@@ -11,7 +11,7 @@ pipeline {
         cluster_name = "eks-X10-prod-01"        // Replace with your EKS cluster name
         kubeconfig_path = "~/.kube/config"      // Path to kubeconfig
         namespace = "osher-polyapp"             // Kubernetes namespace
-        sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-polyapp-deployment" // Replace  SNS Topic ARN
+        sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-polyapp-deployment" // Replace with your SNS Topic ARN
         helm_chart_path = "kubernetes--tampelts/polybot-app/polybot-app-0.0.1.tgz"
         git_repo_url = "https://github.com/eldiabloj/polyboy-kubernetes--tampelts.git" // Replace with your Git repository URL
     }
