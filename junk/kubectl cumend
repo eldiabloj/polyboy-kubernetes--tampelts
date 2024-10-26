@@ -40,9 +40,10 @@ kubectl exec -it release-jenkins-0 -n osher-jenkins -- bin/bash
 kubectl delete all --all -n <your-namespace>
 helm uninstall <release-name> -n <your-namespace>
 helm list -n <your-namespace>
-
-
-
+kubectl get all -n osher-pollyapp
+kubectl delete all --all -n osher-pollyapp
+kubectl get configmaps -n osher-pollyapp
+kubectl delete configmap <configmap-name> -n osher-pollyapp
 
 
 
