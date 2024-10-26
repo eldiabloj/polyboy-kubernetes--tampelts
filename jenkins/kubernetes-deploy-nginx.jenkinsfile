@@ -11,7 +11,7 @@ pipeline {
         cluster_name = "eks-X10-prod-01"        // Replace with your EKS cluster name
         kubeconfig_path = "~/.kube/config"      // Path to kubeconfig
         namespace = "osher-nginx"             // Kubernetes namespace
-        sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-nginx-deployment:8a38c8ae-1db3-4d90-85f3-7698f6adf5dc" // Replace with your SNS Topic ARN
+        sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-nginx-deployment" // Replace with your SNS Topic ARN
         helm_chart_path = "/home/ubuntu/nginx-app-0.1.0.tgz"
         git_repo_url = "https://github.com/eldiabloj/polyboy-kubernetes--tampelts.git" // Replace with your Git repository URL
 
