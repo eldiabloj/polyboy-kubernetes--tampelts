@@ -1,7 +1,6 @@
 pipeline {
     agent { label 'osher-ec2-fleet' }
 
-
     environment {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         DOCKER_REGISTRY = "eldiabloj/polybot"
@@ -10,20 +9,23 @@ pipeline {
         ecr_registry = "023196572641.dkr.ecr.us-east-2.amazonaws.com/osher-ecr:latest"
         ecr_repo = "${ecr_registry}/osher-ecr:latest" // Replace with your ECR repository
         image_tag = "latest, polybot"           // Image tag from the build pipeline
-        cluster_name = "eks-X10-prod-01"     // Replace with your EKS cluster name
-        kubeconfig_path = "~/.kube/config"     // Path to kubeconfig
-        namespace = "osher-polyapp"                  // Kubernetes namespace
+        cluster_name = "eks-X10-prod-01"        // Replace with your EKS cluster name
+        kubeconfig_path = "~/.kube/config"      // Path to kubeconfig
+        namespace = "osher-polyapp"             // Kubernetes namespace
         sns_topic_arn = "arn:aws:sns:us-east-2:023196572641:osher-polyapp-deployment" // Replace with your SNS Topic ARN
     }
+
     stages {
         stage('AWS Configure') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-                    credentialsId: 'AIDAQKZU7TPQ2NYHX4YLMosher-aws'
-                ]]) {
+                withCredentials([
+                    [
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+                        credentialsId: 'AIDAQKZU7TPQ2NYHX4YLMosher-aws'
+                    ]
+                ]) {
                     script {
                         // Configure AWS CLI with the provided credentials and region
                         sh """
@@ -36,19 +38,18 @@ pipeline {
             }
         }
 
-    stages {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-
-
-                    sh "export HELM_DRIVER=configmap && helm install polybot-be /home/oj/PycharmProjects/kubetnetes/polybot-app/polybot-app-0.0.1.tgz -n osher-polyapp  --kubeconfig /home/oj/.kube/config"
-
+                    sh """
+                        export HELM_DRIVER=configmap
+                        helm install polybot-be /home/oj/PycharmProjects/kubetnetes/polybot-app/polybot-app-0.0.1.tgz \
+                        -n ${namespace} --kubeconfig ${kubeconfig_path}
+                    """
                 }
             }
         }
     }
-}
 
     post {
         success {
