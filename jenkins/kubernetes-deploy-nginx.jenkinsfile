@@ -71,7 +71,7 @@ pipeline {
     post {
         success {
             echo "Deployment to EKS completed successfully."
-            sendSNSNotification("SUCCESS", "Deployment to EKS completed successfully for ${env.deployment_name}")
+            sendSNSNotification("SUCCESS", "ngins-Deployment to EKS completed successfully for ${env.deployment_name}")
         }
         failure {
             echo "Deployment failed. Check logs for details."
