@@ -61,7 +61,7 @@ pipeline {
                 script {
                     sh """
                         export HELM_DRIVER=configmap
-                        helm install nginx-fe ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
+                        helm upgrade nginx-fe ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
                     """
                 }
             }

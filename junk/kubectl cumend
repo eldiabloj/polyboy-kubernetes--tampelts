@@ -67,7 +67,8 @@ kubectl delete service <service-name> -n osher-pollyapp
 or
 kubectl delete all --all -n osher-pollyapp
 
-kubectl get configmaps -n osher-pollyapp
+kubectl get configmaps -n osher-pollyappcd
+
 kubectl delete configmap <configmap-name> -n osher-pollyapp
 
 kubectl get secrets -n osher-pollyapp
