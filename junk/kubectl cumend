@@ -41,7 +41,10 @@ alias hh="helm -n osher-app"
 
 
 
+
 helm template (helm template myrelease ./mychart --values custom-values.yaml)
+
+helm lint ./path-to-your-chart
 
 helm uninstall
 
@@ -72,8 +75,7 @@ kubectl get configmaps -n osher-pollyappcd
 kubectl delete configmap <configmap-name> -n osher-pollyapp
 
 kubectl get secrets -n osher-pollyapp
-kubectl delete secret <secret-name> -n osher-pollyapp
-
+kubectl delete secret <secret-name> -n osher-pollyapp /--all
 kubectl get pvc -n osher-pollyapp
 kubectl delete pvc <pvc-name> -n osher-pollyapp
 
