@@ -4,7 +4,6 @@ pipeline {
     environment {
         IMG_NAME = "polybot:${BUILD_NUMBER}"
         DOCKER_REGISTRY = "eldiabloj/polybot"
-        aws-secret= "arn:aws:secretsmanager:us-east-2:023196572641:secret:osher-API-token-UHRLeF"
         aws_region = "us-east-2"               // Replace with your AWS region
         ecr_registry = "023196572641.dkr.ecr.us-east-2.amazonaws.com/osher-ecr:latest"
         ecr_repo = "${ecr_registry}/osher-ecr:latest" // Replace with your ECR repository
@@ -61,7 +60,7 @@ pipeline {
                 script {
                     sh """
                         export HELM_DRIVER=configmap
-                        helm upgrade polybot-be ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
+                        helm install polybot-be ${env.helm_chart_path} -n ${namespace} --kubeconfig ${kubeconfig_path}
                     """
                 }
             }
