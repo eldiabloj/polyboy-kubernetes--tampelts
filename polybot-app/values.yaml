@@ -1,7 +1,7 @@
 replicas: 1
 image:
   repository: eldiabloj/polybot
-  tag: 27
+  tag: latest
 env: production
 resources:
   requests:
